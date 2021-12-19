@@ -80,7 +80,7 @@ def sms_reply():
         song_url_list = jio_query(str(msg[5:]))
         if len(song_url_list) > 0:
             msg = resp.message()
-            msg.media(url)
+            msg.media(song_url_list[0].url)
         else:
             msg = resp.message(f"No song found for {msg[5:]}")
         return str(resp)
