@@ -20,10 +20,15 @@ from twilio.twiml.messaging_response import MessagingResponse
 from twilio.rest import Client
 from twilio.twiml.voice_response import Record, VoiceResponse
 
-
+from song import Song
 
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
 headers = { 'User-Agent': USER_AGENT }
+
+JIO_SAAVN_HEADERS = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1;' +
+        ' WOW64; rv:39.0) Gecko/20100101 Firefox/75.0',
+}
 
 account_sid = 'AC3c600310d1da548ea07a9cc421f9cd00'
 auth_token = 'e389a2d283a6d008aafa02bd7e5221fe'
@@ -69,34 +74,17 @@ def sms_reply():
 
             return str(resp)
 
-    # elif(msg.startswith("!yt ")):
-    #         resp = MessagingResponse()
-    #         ytsearch = msg[4:]
-    #         query_string = urllib.parse.urlencode({"search_query" : ytsearch})
-    #         html_content = urllib.request.urlopen("http://www.youtube.com/results?" + query_string)
-    #         search_results = re.findall(r'href=\"\/watch\?v=(.{11})', html_content.read().decode())
-    #         print(search_results)
-    #         msg = resp.message("http://www.youtube.com/watch?v=" + search_results[0])
-
-    #         return str(resp)
-
-    # elif(msg.startswith("!weather ")):
-    #         city = msg[9:]
-    #         resp = MessagingResponse()
-    #         try:
-    #                 query = 'q='+city
-    #                 w_data = requests.get('http://api.openweathermap.org/data/2.5/weather?'+query+'&APPID=b35975e18dc93725acb092f7272cc6b8&units=metric')
-    #                 result = w_data.json()
-
-    #                 msg = resp.message("{}'s Temperature: {} °C\r\nDescription: {} \r\nWeather: {} \r\nWind speed: {} m/s".format(city, result['main']['temp'], result['weather'][0]['description'], result['weather'][0]['main'], result['wind']['speed']))
-
-
-    #         except:
-    #                 msg = resp.message("City not found!")
-    #                 pass
-
-    #         return str(resp)
-
+    
+    elif msg.startswith("!jio "):
+        resp = MessagingResponse()
+        song_url_list = jio_query(str(msg[5:]))
+        if len(song_url_list) > 0:
+            msg = resp.message()
+            msg.media(url)
+        else:
+            msg = resp.message(f"No song found for {msg[5:]}")
+        return str(resp)
+    
     elif(msg.startswith("!ud ")):
             query = msg[4:]
             resp = MessagingResponse()
@@ -145,10 +133,7 @@ def sms_reply():
                             url_gif = gif_id[0].images.downsized.url
                             str1 = str(url_gif)
 
-                            msg.media(str1)
                             msg = resp.message(str1[:str1.find('?')])
-
-                            # msg.media("http://s3.amazonaws.com/blog.invisionapp.com/uploads/2014/12/motion-example.gif")
                     else:
                         msg = resp.message("bad word")
                 except ApiException as e:
@@ -158,11 +143,17 @@ def sms_reply():
             else:
                 sg = resp.message("Invalid!")
 
-
-
             return str(resp)
 
 
+def jio_query(query_text, max_results=5):
+    """Fetch songs from query."""
+    req = requests.get(
+        headers=JIO_SAAVN_HEADERS,
+        url=f"https://www.jiosaavn.com/api.php?p=1&q={query_text.replace(' ', '+')}\
+            &_format=json&_marker=0&api_version=4&ctx=wap6dot0\
+            &n={max_results}&__call=search.getResults")
+    return parse_query(req.json())
 
 if __name__ == "__main__":
     app.run(debug=True)
