@@ -145,7 +145,31 @@ def sms_reply():
 
             return str(resp)
 
+def parse_query(query_json):
+    """Set metadata and return Song obj list."""
+    song_list = []
+    song_url_list = []
+    for sng_raw in query_json['results']:
+        song_id = sng_raw['id']
+        song_title = sng_raw['title']
+        song_year = sng_raw['year']
+        song_album = sng_raw['more_info']['album']
+        song_copyright = sng_raw['more_info']['copyright_text']
+        if len(sng_raw['more_info']['artistMap']['primary_artists']) != 0:
+            song_artist = sng_raw['more_info']['artistMap']['primary_artists'][0]['name']
+        else:
+            song_artist = "Unknown"
+        song_ = Song(songid=song_id,
+                     title=song_title, artist=song_artist, year=song_year,
+                     album=song_album, copyright=song_copyright)
+        song_list.append(song_)
 
+        for song in song_list:
+            filtered_song = get_song_urls(song)
+            if filtered_song is not None:
+                song_url_list.append(filtered_song)
+    return song_url_list
+        
 def jio_query(query_text, max_results=5):
     """Fetch songs from query."""
     req = requests.get(
