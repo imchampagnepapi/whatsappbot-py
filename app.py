@@ -55,7 +55,7 @@ def sms_reply():
             request2 = urllib.request.Request(url, None, headers = headers)
             response = urllib.request.urlopen(request2)
             html = response.read().decode('utf8')
-            
+
             links = re.findall('murl&quot;:&quot;(.*?)&quot;',html)
             print(links)
 
@@ -68,7 +68,7 @@ def sms_reply():
                 msg.media(url)
 
             return str(resp)
-        
+
     # elif(msg.startswith("!yt ")):
     #         resp = MessagingResponse()
     #         ytsearch = msg[4:]
@@ -77,9 +77,9 @@ def sms_reply():
     #         search_results = re.findall(r'href=\"\/watch\?v=(.{11})', html_content.read().decode())
     #         print(search_results)
     #         msg = resp.message("http://www.youtube.com/watch?v=" + search_results[0])
-            
+
     #         return str(resp)
-        
+
     # elif(msg.startswith("!weather ")):
     #         city = msg[9:]
     #         resp = MessagingResponse()
@@ -87,14 +87,14 @@ def sms_reply():
     #                 query = 'q='+city
     #                 w_data = requests.get('http://api.openweathermap.org/data/2.5/weather?'+query+'&APPID=b35975e18dc93725acb092f7272cc6b8&units=metric')
     #                 result = w_data.json()
-                    
+
     #                 msg = resp.message("{}'s Temperature: {} °C\r\nDescription: {} \r\nWeather: {} \r\nWind speed: {} m/s".format(city, result['main']['temp'], result['weather'][0]['description'], result['weather'][0]['main'], result['wind']['speed']))
-                    
-                    
+
+
     #         except:
     #                 msg = resp.message("City not found!")
     #                 pass
-                
+
     #         return str(resp)
 
     elif(msg.startswith("!ud ")):
@@ -108,7 +108,7 @@ def sms_reply():
             if len(data['list'])==0:
                     msg = resp.message(f"No result found for {query}")
                     pass
-                           
+
             else:
                     definition = data['list'][0]['definition']
                     urls = data['list'][0]['permalink']
@@ -125,7 +125,7 @@ def sms_reply():
             gif_search = msg[5:]
             resp = MessagingResponse()
 
-            
+
             search = str(gif_search).replace("!@#$%^&*()[]{};:,./<>?\|`~-=_", "")
             search = str(search).replace(" ","+")
             pattern = re.compile("[A-Za-z0-9\+\s]")
@@ -136,16 +136,18 @@ def sms_reply():
                     if(pf.is_clean(search)):
                         response = api_instance.gifs_search_get(giphy_token, search, rating='pg-13', limit=25,offset=randint(1,10), fmt='gif')
                         lst = list(response.data)
-                            
-                        if len(lst) == 0:    
+
+                        if len(lst) == 0:
                             msg = resp.message("No Gif Found!")
                             pass
                         else:
                             gif_id = random.choices(lst)
                             url_gif = gif_id[0].images.downsized.url
                             str1 = str(url_gif)
-                            
+
+                            msg.media(str1)
                             msg = resp.message(str1[:str1.find('?')])
+
                             # msg.media("http://s3.amazonaws.com/blog.invisionapp.com/uploads/2014/12/motion-example.gif")
                     else:
                         msg = resp.message("bad word")
@@ -155,12 +157,12 @@ def sms_reply():
                         pass
             else:
                 sg = resp.message("Invalid!")
-                    
-                            
+
+
 
             return str(resp)
-                                            
-                                            
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
