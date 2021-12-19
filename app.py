@@ -84,7 +84,7 @@ def sms_reply():
             Album: {song_url_list[0].album}
             Artist: {song_url_list[0].artist}
             ''')
-            msg.media(song_url_list[0].thumb_url)
+            #msg.media(song_url_list[0].thumb_url)
             msg.media(song_url_list[0].url)
         else:
             msg = resp.message(f"No song found for {msg[5:]}")
