@@ -129,7 +129,8 @@ def sms_reply():
                     if(pf.is_clean(search)):
                         response = api_instance.gifs_search_get(giphy_token, search, rating='pg-13', limit=25,offset=randint(1,10), fmt='gif')
                         lst = list(response.data)
-
+                        print(lst)
+                        
                         if len(lst) == 0:
                             msg = resp.message("No Gif Found!")
                             pass
