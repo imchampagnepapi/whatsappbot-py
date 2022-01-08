@@ -141,7 +141,7 @@ def sms_reply():
                             print(str1.split('?')[0])
                             # [:str1.find('?')]
                             #msg = resp.message(str1)
-                            msg.media(str1.split('?')[0])
+                            msg.media("https://c.tenor.com/QwBPdcmP8FgAAAAj/get-yourself-tested-get-tested.gif")
                     else:
                         msg = resp.message("bad word")
                 except ApiException as e:
