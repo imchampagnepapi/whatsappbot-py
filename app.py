@@ -137,8 +137,9 @@ def sms_reply():
                             gif_id = random.choices(lst)
                             url_gif = gif_id[0].images.downsized.url
                             str1 = str(url_gif)
-
-                            msg = resp.message(str1[:str1.find('?')])
+                            print(str1)
+                            # [:str1.find('?')]
+                            msg = resp.message(str1)
                     else:
                         msg = resp.message("bad word")
                 except ApiException as e:
