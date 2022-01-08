@@ -134,13 +134,13 @@ def sms_reply():
                             msg = resp.message("No Gif Found!")
                             pass
                         else:
+                            msg = resp.message()
                             gif_id = random.choices(lst)
                             url_gif = gif_id[0].images.downsized.url
                             str1 = str(url_gif)
-                            print(str1)
+                            print(str1.split('?')[0])
                             # [:str1.find('?')]
                             #msg = resp.message(str1)
-                            msg = resp.message()
                             msg.media(str1.split('?')[0])
                     else:
                         msg = resp.message("bad word")
