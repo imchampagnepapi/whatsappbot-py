@@ -30,15 +30,15 @@ JIO_SAAVN_HEADERS = {
         ' WOW64; rv:39.0) Gecko/20100101 Firefox/75.0',
 }
 
-account_sid = 'AC3c600310d1da548ea07a9cc421f9cd00'
-auth_token = 'e389a2d283a6d008aafa02bd7e5221fe'
+account_sid = 'TWILIO SID'
+auth_token = 'TWILIO AUTH TOKEN HERE'
 client = Client(account_sid, auth_token)
 
 api_instance = giphy_client.DefaultApi()
-giphy_token =  'fgEpTwmDIoWWfCkgYSbTC4zDJdKHNC8T'
+giphy_token =  'GIPHY TOKEN HERE'
 
 from_whatsapp_number = 'whatsapp:+14155238886'
-to_whatsapp_number = 'whatsapp:+917016048948'
+to_whatsapp_number = 'whatsapp:+917099XXXX09'
 
 app = Flask(__name__)
 
