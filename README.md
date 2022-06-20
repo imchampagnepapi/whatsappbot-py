@@ -19,3 +19,5 @@ Also, this whatsapp bot uses giphy_client for looking up relevant user searches 
 - !ud KEYWORD   (urban dictionary word meaning lookup)
 
 More yet to come...stay tuned!!!
+
+<a href="https://www.buymeacoffee.com/sarj33t" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
